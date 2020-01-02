@@ -215,17 +215,12 @@ func NewBlock( header *Header, txs []*Transaction, uncles []*Header, receipts []
 	if db == nil {
 		log.Info("db is empty")
 	}
-
-	if db != nil{
-		index := mst.Inverted_list{Db:db}
-		if header.PreMstHash != [common.HashLength]byte{} {
-			index.RenewList()
-		}
-		preMst := mst.MST{RootHash:header.PreMstHash, Db:db}
-		preMst.ReNewMst()
+	index := mst.Inverted_list{Db:db}
+	if header.PreMstHash != [common.HashLength]byte{} {
+		index.RenewList()
 	}
-
-
+	preMst := mst.MST{RootHash:header.PreMstHash, Db:db}
+	preMst.ReNewMst()
 
 	// TODO: panic if len(txs) != len(receipts)
 	if len(txs) == 0 {
@@ -253,19 +248,19 @@ func NewBlock( header *Header, txs []*Transaction, uncles []*Header, receipts []
 		}
 	}
 
-	//if db != nil {
-	//	var filekv mst.File
-	//	for i := range txs{
-	//		filekv = mst.File{Name:txs[i].Filename(),Keys:txs[i].Key()}
-	//		mst.CreateIndex(filekv,uint(header.Number.Int64()),&index, &preMst)
-	//	}
-	//	preMst.PutRootHash()
-	//	b.header.MstHash = preMst.RootHash
-	//}
-
+	if db != nil {
+		var filekv mst.File
+		for i := range txs{
+			filekv = mst.File{Name:txs[i].Filename(),Keys:txs[i].Key()}
+			mst.CreateIndex(filekv,uint(header.Number.Int64()),&index, &preMst)
+		}
+		preMst.PutRootHash()
+		b.header.MstHash = preMst.RootHash
+	}
 
 	return b
 }
+
 
 // NewBlockWithHeader creates a block with the given header data. The
 // header data is copied, changes to header and to the field values

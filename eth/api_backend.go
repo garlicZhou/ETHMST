@@ -19,6 +19,7 @@ package eth
 import (
 	"context"
 	"errors"
+	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/mst"
 	"math/big"
 
@@ -53,6 +54,31 @@ func (b *EthAPIBackend) Search(ctx context.Context, key []string) []uint {
 	mst := mst.MST{RootHash: block.MstHash(), Db:b.ChainDb()}
 	mst.ReNewMst()
 	return mst.Search(key)
+}
+
+func (b *EthAPIBackend) UpdateMst() {
+	var i rpc.BlockNumber
+	for i = 0; i.Int64() <= int64(b.CurrentBlock().NumberU64()); i++ {
+		block, _ := b.BlockByNumber(nil,i)
+		if b.ChainDb() == nil {
+			log.Info("db is empty")
+		}
+		log.Info("db is not empty")
+		index := mst.Inverted_list{Db:b.ChainDb()}
+		if block.Header().PreMstHash != [common.HashLength]byte{} {
+			index.RenewList()
+		}
+		preMst := mst.MST{RootHash:block.Header().PreMstHash, Db:b.ChainDb()}
+		preMst.ReNewMst()
+		var filekv mst.File
+		for i := range block.Transactions(){
+			filekv = mst.File{Name:block.Transactions()[i].Filename(),Keys:block.Transactions()[i].Key()}
+			mst.CreateIndex(filekv,uint(block.Header().Number.Int64()),&index, &preMst)
+		}
+		preMst.PrintMst()
+		preMst.PutRootHash()
+	}
+
 }
 
 // ChainConfig returns the active chain configuration.

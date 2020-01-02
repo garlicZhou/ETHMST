@@ -18,6 +18,7 @@
 package consensus
 
 import (
+	"github.com/ethereum/go-ethereum/ethdb"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -93,7 +94,7 @@ type Engine interface {
 	// Note: The block header and state database might be updated to reflect any
 	// consensus rules that happen at finalization (e.g. block rewards).
 	FinalizeAndAssemble(chain ChainReader, header *types.Header, state *state.StateDB, txs []*types.Transaction,
-		uncles []*types.Header, receipts []*types.Receipt) (*types.Block, error)
+		uncles []*types.Header, receipts []*types.Receipt, db ethdb.Database) (*types.Block, error)
 
 	// Seal generates a new sealing request for the given input block and pushes
 	// the result into the given channel.

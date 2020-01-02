@@ -240,15 +240,15 @@ func (e *NoRewardEngine) Finalize(chain consensus.ChainReader, header *types.Hea
 }
 
 func (e *NoRewardEngine) FinalizeAndAssemble(chain consensus.ChainReader, header *types.Header, statedb *state.StateDB, txs []*types.Transaction,
-	uncles []*types.Header, receipts []*types.Receipt) (*types.Block, error) {
+	uncles []*types.Header, receipts []*types.Receipt,db ethdb.Database) (*types.Block, error) {
 	if e.rewardsOn {
-		return e.inner.FinalizeAndAssemble(chain, header, statedb, txs, uncles, receipts)
+		return e.inner.FinalizeAndAssemble(chain, header, statedb, txs, uncles, receipts, db)
 	} else {
 		e.accumulateRewards(chain.Config(), statedb, header, uncles)
 		header.Root = statedb.IntermediateRoot(chain.Config().IsEIP158(header.Number))
 
 		// Header seems complete, assemble into a block and return
-		return types.NewBlock(header, txs, uncles, receipts,nil), nil
+		return types.NewBlock(header, txs, uncles, receipts,db), nil
 	}
 }
 
@@ -539,7 +539,7 @@ func (api *RetestethAPI) mineBlock() error {
 			}
 		}
 	}
-	block, err := api.engine.FinalizeAndAssemble(api.blockchain, header, statedb, txs, []*types.Header{}, receipts)
+	block, err := api.engine.FinalizeAndAssemble(api.blockchain, header, statedb, txs, []*types.Header{}, receipts, api.blockchain.GetDB())
 	if err != nil {
 		return err
 	}

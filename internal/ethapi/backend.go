@@ -66,6 +66,7 @@ type Backend interface {
 	SubscribeChainSideEvent(ch chan<- core.ChainSideEvent) event.Subscription
 
 	Search(ctx context.Context, key []string) []uint
+    UpdateMst()
 
 	// Transaction pool API
 	SendTx(ctx context.Context, signedTx *types.Transaction) error

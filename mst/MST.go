@@ -233,7 +233,7 @@ func (node1 *node) updateHash(db ethdb.Database) {
 	}
 }
 
-func (t *MST) printMst() {
+func (t *MST) PrintMst() {
 	fmt.Printf("root: ")
 	t.Root.printNode()
 	fmt.Print("\n")

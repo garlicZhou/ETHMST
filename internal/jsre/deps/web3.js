@@ -5283,6 +5283,16 @@ var methods = function () {
     outputFormatter: 1
   });
 
+    var UpdateMst = new Method({
+        name: 'updateMst',
+        call: 'eth_updateMst',
+        params: 0,
+        inputFormatter: [null],
+        outputFormatter: 1
+    });
+
+
+
     var getStorageAt = new Method({
         name: 'getStorageAt',
         call: 'eth_getStorageAt',
@@ -5442,6 +5452,7 @@ var methods = function () {
     return [
         getBalance,
         Search,
+        UpdateMst,
         getStorageAt,
         getCode,
         getBlock,

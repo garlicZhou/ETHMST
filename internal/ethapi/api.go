@@ -542,6 +542,11 @@ func (s *PublicBlockChainAPI) Search(ctx context.Context, key []string) []uint {
 		return s.b.Search(ctx,key)
  }
 
+func (s *PublicBlockChainAPI) UpdateMst() {
+	 s.b.UpdateMst()
+}
+
+
 // Result structs for GetProof
 type AccountResult struct {
 	Address      common.Address  `json:"address"`

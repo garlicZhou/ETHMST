@@ -127,7 +127,7 @@ If the console stops you sending a transaction through http, add the unlock para
 Send a transaction
 
 ```
-curl -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{
+curl -X POST "localhost:8545" -H "Content-Type:application/json" --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{
   "from": "0xa9cf6de0905c2bd58f48e0b13a73b89eef95e0e7",
   "to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
   "value": "0x988090",
@@ -139,7 +139,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{
 Search a block by key words
 
 ```
-curl -X POST --data '{"jsonrpc":"2.0","method":"eth_search","params":[["b"]],"id":11}'
+curl -X POST "localhost:8545" -H "Content-Type:application/json" --data '{"jsonrpc":"2.0","method":"eth_search","params":[["b"]],"id":11}'
 ```
 
 Other json-rpc functions please search in https://eth.wiki/json-rpc/API

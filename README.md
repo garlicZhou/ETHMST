@@ -6,9 +6,9 @@ Mstdb is a semantic blockchain system based on go-ethereum(v1.8).
 
 On Linux ( > Ubuntu 16.04)
 
-Go 1.12 or later
+Go 1.12 or later, close the go module
 
-a C compiler
+a C compiler (gcc or others)
 
 ## Building the source
 
